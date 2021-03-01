@@ -3,8 +3,8 @@ const numbers = document.querySelectorAll('.number-btn'),
   clearBtn = document.getElementById('ac'),
   resultBtn = document.getElementById('result'),
   decimalBtn = document.getElementById('decimal'),
-  display = document.getElementById('display'),
-  memoryCurrentNumber = '0',
+  display = document.getElementById('display');
+let memoryCurrentNumber = 0,
   memoryNewNumber = false,
   memoryPendingOperation = '';
 
@@ -15,30 +15,68 @@ for (let i = 0; i < numbers.length; i++) {
 
 for (let i = 0; i < operators.length; i++) {
   const operator = operators[i];
-  operator.addEventListener('click',  (e) => operation(e.target.textContent));
+  operator.addEventListener('click', (e) => operation(e.target.textContent));
 }
 
 clearBtn.addEventListener('click', clear);
 
-resultBtn.addEventListener('click', result);
-
 decimalBtn.addEventListener('click', decimal);
 
 function numberPress(num) {
-  console.log(`Клик по номеру ${num}`);
+  if (memoryNewNumber) {
+    display.value = num;
+    memoryNewNumber = false;
+  } else {
+    if (display.value === '0') {
+      display.value = num;
+    } else {
+      display.value += num;
+    }
+  }
 }
 
-function operation(sumbol) {
-  console.log(`Клик по оператору ${sumbol}`);
+function operation(oper) {
+  let localOperationMemory = display.value;
+
+  if (memoryNewNumber && memoryPendingOperation !== '=') {
+    display.value = memoryCurrentNumber;
+  } else {
+    memoryNewNumber = true;
+    if (memoryPendingOperation === '+') {
+      memoryCurrentNumber += parseFloat(localOperationMemory);
+    } else if (memoryPendingOperation === '-') {
+      memoryCurrentNumber -= parseFloat(localOperationMemory);
+    } else if (memoryPendingOperation === '*') {
+      memoryCurrentNumber *= parseFloat(localOperationMemory);
+    } else if (memoryPendingOperation === '/') {
+      memoryCurrentNumber /= parseFloat(localOperationMemory);
+    } else {
+      memoryCurrentNumber = parseFloat(localOperationMemory);
+    }
+  }
+  display.value = memoryCurrentNumber;
+  memoryPendingOperation = oper;
 }
 
-function decimal() {
-  console.log('Клик по разделительной точке');
+function decimal(arg) {
+  let localDecimalMemory = display.value;
+
+  if (memoryNewNumber) {
+    localDecimalMemory = '.0';
+    memoryNewNumber = false;
+  } else {
+    if (localDecimalMemory.indexOf('.') === -1) {
+      localDecimalMemory += '.';
+    }
+  }
+  display.value = localDecimalMemory;
 }
 
-function clear() {
-  console.log('Клик по ac');
-}
-function result() {
-  console.log('Клик по результату');
+function clear(id) {
+  if ((id = 'ac')) {
+    display.value = '0';
+    memoryNewNumber = true;
+    memoryCurrentNumber = 0;
+    memoryPendingOperation = '';
+  }
 }
