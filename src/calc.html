@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculator</title>
     <link rel="stylesheet" href="calc.css">
+    <script defer src="calc.js"></script>
   </head>
   <body>
     <main>
@@ -17,10 +18,10 @@
               value="0"
               id="display"
               class="calc-display-input"
-              placeholder="00000000000000"
+              placeholder="0"
             />
           </div>
-          <div class="calc-buttons">
+          <div class="calc-buttons" id="calc_buttons">
             <button type="button" class="btn clear-btn" id="ac">ac</button>
             <button type="button" class="btn operator-btn">/</button>
             <button type="button" class="btn operator-btn">*</button>
@@ -41,7 +42,6 @@
           </div>
         </div>
       </div>
-    </main>
-    <script src="calc.js"></script>
+    </main>    
   </body>
 </html>
